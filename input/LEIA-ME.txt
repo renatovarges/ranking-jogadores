@@ -1,0 +1,130 @@
+LEIA-ME — Novo Projeto “Rankings Elegantes” (Isolado)
+
+Objetivo
+- Recriar a aba “Rankings Elegantes” em um projeto Flask isolado, mantendo layout, filtros e lógicas corretas, sem colisões de rotas e sem fallback silencioso.
+- Usar auditoria interna como fonte de verdade para o bloco “Por mando”, garantindo nomes legíveis, chips por jogo e total = soma das chips.
+
+Visão Geral da Arquitetura
+- Aplicação única Flask (sem duplicidade de rotas) com:
+  - Rota de página: /rankings-elegantes
+  - Auditoria: /debug/audit_atacantes (e congêneres por posição)
+  - Estáticos: /static/* (CSS, imagens)
+  - Templates Jinja: base.html, rankings_elegantes.html
+- Sem blueprints concorrentes. Uma única função gera a página.
+- Ranking “Por mando” determinístico: janela team-first por clube e mando da rodada de referência.
+
+Estrutura de Pastas (copiar para “FASE DOS JOGADORES”)
+FASE DOS JOGADORES/
+- app.py
+- wsgi.py
+- requirements.txt
+- templates/
+  - base.html
+  - rankings_elegantes.html
+- static/
+  - style.css
+  - rankings.css
+  - escudos/  ← colocar aqui os PNG dos clubes 2025
+- dados/
+  - Scouts_Reorganizado.xlsx (aba “Por jogo”) [coloque aqui]
+  - escudos_map.json  ← mapa nome-normalizado → arquivo PNG
+  - partidas_<RR>.json ← confrontos no modelo Cartola (opcional)
+
+Dependências
+- Python 3.10+
+- Flask
+- pandas
+- openpyxl
+- Jinja2
+- requests (opcional)
+
+Setup (Windows/Trae)
+1) Criar venv:
+   python -m venv .venv
+2) Ativar venv:
+   .\.venv\Scripts\activate
+3) Instalar deps:
+   pip install -r requirements.txt
+4) Colocar “dados/Scouts_Reorganizado.xlsx” (aba “Por jogo”).
+   Colocar escudos PNG em “static/escudos/” e o mapa “dados/escudos_map.json” associando nome do clube ao arquivo PNG.
+   Opcional: colocar arquivo de confrontos para a rodada de referência em “dados/confrontos_rr.json” ou “dados/confrontos_<RR>.json”.
+   Formato aceito:
+   {
+     "partidas": [
+       { "mandante": "Time A", "visitante": "Time B" },
+       ...
+     ]
+   }
+5) Executar servidor:
+   python wsgi.py
+6) Abrir:
+   http://127.0.0.1:5000/rankings-elegantes
+
+Parâmetros da Página
+- ultimos: N últimas rodadas (3/5/7/10)
+- ref_round: rodada de referência para mando (ex.: 38)
+- topn: Top N por posição
+- posicao: Vazia => Todas, ou uma entre [Goleiro,Lateral,Zagueiro,Meia,Atacante]
+- bloco: “todas” ou “por_mando”
+- nocache: 1 para ignorar cache
+
+Regras de Cálculo — Por Mando (Fonte de Verdade)
+- Determinar o mando do time na rodada de referência (casa/fora). Preferência:
+  1) Arquivo local “dados/confrontos_rr.json” ou “dados/confrontos_<RR>.json” (mandante/visitante por nome de clube).
+  2) Fallback pelo próprio dataset (colunas “Rodada”/“RodadaID”/“R” + “Mando”).
+- Construir window_by_club:
+  - últimas N datas desse time no mesmo mando da rodada de referência.
+- Para cada atleta do time:
+  - filtrar linhas em que DATA ∈ janela e Mando = alvo
+  - drop_duplicates por [DATA, Adversário, Mando]
+  - pontos por jogo: usar “Pts” quando confiável; caso contrário, somar SCORING dos scouts
+  - total = soma das chips exibidas
+  - nome: mapear por ID→Apelido/Nome; fallback textual (valor com letras) se mapa falhar
+- Ordenar decrescente por total e cortar Top N.
+
+Regras de Renderização
+- base.html contém estrutura, cabeçalho, nav e import de CSS.
+- rankings_elegantes.html:
+  - usa exclusivamente “tops[pos]” vindo do app
+  - nome do atleta: p.apelido (nunca ID)
+  - total: p.total
+  - chips: loop p.matches exibindo value e scouts
+  - logos: opp_logo e escudo_url resolvidos via “dados/escudos_map.json” + arquivos em “static/escudos/”
+- Sem fallback silencioso. Se “Por mando” falhar, exibir erro visível.
+
+Garantias Contra Colisões
+- Uma única rota responde /rankings-elegantes (sem blueprint concorrente).
+- Não registrar outra rota com o mesmo caminho.
+- Se quiser adicionar outras páginas, use caminhos distintos (ex.: /confrontos-goleiros, /confrontos-zagueiros) neste projeto ou em projetos separados.
+
+Checklist de Validação
+1) /rankings-elegantes?bloco=por_mando&posicao=Atacante&ultimos=3&topn=5&ref_round=38&nocache=1
+2) Abrir /debug/audit_atacantes com mesmos parâmetros.
+3) Comparar atleta por atleta:
+   - nome legível
+   - nº de chips = tamanho de chips_por_mando
+   - valor de cada chip igual
+   - total = soma das chips
+4) Se divergente, inspecionar logs e ajustar exclusivamente o cálculo deterministicamente.
+
+Logs
+- app grava evidências mínimas: parâmetros e erros de execução.
+- Não há fallback para “Todas” quando “Por mando” falhar.
+
+Erros a Evitar
+- Duplicar rotas para /rankings-elegantes.
+- Usar ID como nome no card.
+- Permitir que a página caia num fluxo genérico em caso de erro.
+
+Arquivos Inclusos
+- Todos os arquivos base (app.py, wsgi.py, templates, CSS, requirements.txt) estão prontos para copiar em “FASE DOS JOGADORES/”.
+
+Como Migrar Layout e CSS
+- Copie seus escudos para “static/escudos/”.
+- Ajuste paths de imagens se necessário.
+- O HTML segue a mesma estrutura visual já usada.
+
+Plano de Expansão
+- Adicionar auditorias equivalentes para cada posição.
+- Adicionar cache separado para “todas” e “por_mando”.
+- Adicionar testes unitários simples para a função build_ranking_por_mando.

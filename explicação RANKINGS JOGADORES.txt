@@ -1,0 +1,86 @@
+RANKINGS JOGADORES
+
+Objetivo
+- Mostrar, de forma clara, visual e ranqueada de maneira decrescente, os jogadores que mais pontuaram, com seus respectivos extratos de pontuação jogo a jogo, nos últimos X jogos de seus times de acordo com o filtro de seleção da quantidade de jogos determinado pelo usuário na hora de criar o ranking.
+- Identificar por meio de um arquivo chamado “RODADAS_BRASILEIRAO_2026” quais os jogos da próxima rodada do campeonato para atribuir a cada time o mando de campo específico que será usado no filtro no site para gerar os dados dos jogadores na arte “ÚLTIMOS X JOGOS POR MANDO”. Ou seja, para gerar a arte dos jogadores “por mando”, o sistema identifica o mando de campo de cada time na próxima rodada e filtra apenas os últimos X jogos de cada time naquele mando específico da próxima rodada.
+Ex. Se o Flamengo na próxima rodada joga como mandante, ao ativar o filtro “por mando” o sistema busca apenas os últimos N jogos que o Flamengo fez como mandante e vai considerar os Scouts e pontuações dos jogadores apenas nesse filtro de mando. 
+Para cada uma das posições (ATACANTES, MEIAS, VOLANTES, ZAGUEIROS, LATERAIS E GOLEIROS) haverá uma arte para o ranking por mando de campo e uma arte sem filtro de mando, ou seja, que vai pegar os últimos X jogos em sequência dos times, independente de ter sido dentro ou fora de casa. 
+
+- Ajudar na tomada de decisão para a próxima rodada, inclusive considerando o mando (casa/fora) do time. 
+
+- Uma coisa importante, ao longo do campeonato, alguns times podem ter jogos isolados, atrasados ou adiantados, fora da sua rodada específica em relação ao andamento ordinário do campeonato. Para fins de análise e busca de jogos, a Planilha de Scouts usada como fonte de dados, mais especificamente a aba “Por jogo”, sempre trará os jogos de cada time por ordem cronológica de disputa, começando pelo mais recente e retrocedendo para o mais antigo, com identificação de data, mando, adversário, jogadores que atuaram, seus respectivos Scouts e pontuação geral e com média básica. Sempre que o site fizer os filtros, seja do número de jogos, seja por mando de campo, são essas datas no arquivo que definirão a ordem dos jogos de cada time, dos mais recentes pros mais antigos. O sistema precisa reconhecer isso com precisão para que não haja erro.
+A REGRA DE OURO: O filtro de "Últimos N Jogos" deve ser CRONOLÓGICO (Por Data), e não sequencial por Rodada. Exemplo: Estar na Rodada 10 não significa que o jogo anterior foi a Rodada 9. Pode ter sido um jogo atrasado da Rodada 2 que aconteceu ontem. O sistema tem que pegar esse jogo da Rodada 2 porque ele é o mais recente de fato.
+O "motor" do sistema tem que garantir que ele ordene tudo por DATA (DD/MM/AAAA) antes de cortar os últimos 3 ou 5 jogos.
+
+- Permitir baixar o visual como PNG de altíssissima e máxima resolução com os dados já consolidados.
+
+Regras (como o ranking é montado)
+- Posições: Goleiro, Lateral, Zagueiro, Volantes, Meias, Atacantes.
+- Janela de jogos:
+  - “Últimas N rodadas” (indicada pelo usuário num filtro seletor no site) define quantos jogos entram no cálculo, sempre começando a contagem de jogos pelo mais recente de cada time na data definida pela Planilha que será fornecida pelo usuário e que será upada na plataforma a cada rodada.
+- Pontuação:
+  - Cada jogo do jogador vira um “chip” com os seus respectivos Scouts do cartola conquistados no geral e por rodada. (G, A, FD, FF etc.).
+  - Junto ao nome e escudo do time do jogador teremos em destaque o total de pontos, a média de pontos, o total de média básica e a média de média básica conquistada nos últimos X jogos do jogador. 
+  - Na planilha existe uma coluna de pontos dos jogadores por data de confronto e também uma coluna com a média básica por data de confronto e também os scouts conquistados por cada um pra gerar aquela pontuação. Os Scouts de cada jogador precisam ser atenta e minuciosamente  identificados corretamente calculados para que a soma da pontuação final do jogador seja correspondente à pontuação final apresentada no arquivo, sem que nenhum scout deixe de ser identificado no extrato do jogador no chip correspondente de cada jogo.  
+- Ordenação:
+  - A imagem gerada sempre vai ordenar, primeiro os Scouts positivos, dos mais numerosos pros menos numerosos e, por fim, os Scouts negativos, dos mais numerosos pros menos numerosos. 
+
+- Normalização:
+  - Nomes de clubes/adversários são padronizados para evitar inconsistência.
+  - Quando o apelido/nome não está claro, tenta resolver com as fontes disponíveis (base e cache). No entanto, a planilha upada traz o nome e o ID de todos os jogadores registrados no campeonato brasileiro, o que não dá motivo pra não identificação de qualquer jogador.
+
+- Importante, a Planilha não traz a divisão entre meias e volantes, para isso, será usado um arquivo chamado “classificacao_meias_volantes” para identificar a posição específica dos meias e volantes. 
+- Toda base de informações sobre a sequência de jogos por data, Scouts e pontuação dos jogadores terá como fonte a planilha fornecida pelo usuário que será upada no site antes de “rodar” o sistema.
+
+Regras específicas por bloco
+- Bloco “Todas”:
+  - Pega os últimos N jogos de cada time, independentemente de mando.
+- Cada jogador terá uma grade com:
+- nome do jogador, escudo do time do jogador, sua pontuação total acumulada nas X rodadas, a média nas X rodadas, a média básica total acumulada nas X rodadas e a média de média básica nas X rodadas. Além disso, na grade de cada jogador teremos os Chips por jogo que mostram o escudo do adversário, a pontuação total do jogador naquele confronto, se foi casa/fora (por meio de cor especifica) e os scouts específicos do jogador naquele jogo. Abaixo desses chips, teremos uma linha com a soma dos Scouts totais do jogador nos X jogos ordenados assim: primeiro os Scouts positivos, dos mais numerosos pros menos numerosos e, depois, os Scouts negativos, dos mais numerosos pros menos numerosos.  
+- Todos os jogadores que atuaram nos N jogos de cada time de acordo com filtro “Todas” precisam ter seus Scouts identificados, suas pontuações somadas para criação de um Ranking. No site temos um filtro de seleção que determina quantos jogadores desse Ranking vão aparecer no card (3, 5, 7, etc...). 
+Ex. Digamos que o site foi acionado para selecionar os últimos 3 jogos de cada time no filtro por mando “Todas” e o filtro de seleção do ranking é de 5 jogadores:
+N últimos jogos: 3
+N de jogadores no ranking: 5
+Mando: Todas
+
+O sistema vai buscar os últimos 3 jogos gerais de cada time, independente do mando, identificar todos os jogadores que atuaram em cada jogo, identificar os Scouts de cada jogador em cada jogo, identificar a pontuação geral e média básica de cada jogador em cada jogo. Somar os pontos de cada jogador nos últimos 3 jogos seguidos de cada time e preparar um ranking pra criação do card do site. Se o ranking aponta 5 como o número de jogadores por posição a aparecer no card, o card deve mostrar por ordem decrescente os 5 jogadores que mais pontuaram nesses últimos 3 jogos do time, independente da quantidade de jogos que cada jogador atuou, ou seja, mesmo que um jogador tenha atuado em apenas um desses 3  jogos, se a pontuação dele alcançada nesse único jogo o coloca no ranking de TOP 5, ele deve entrar no ranking e um único chip de pontuação vai aparecer no card, pois ele atuou apenas uma vez. Isso também vale se o jogador atuou apenas 2 vezes nos últimos 3 jogos do time. 
+O mais importante é o sistema entender que o ranking é montado a partir de uma lógica simples:
+- Últimos N jogos do time são identificados e não os últimos N jogos dos jogadores
+- O que precisa ser filtrado e calculado são os Scouts, os pontos e a média básica dos jogadores que atuaram nesses N jogos de cada time, mesmo que muitos deles não apareçam em todos os N jogos. A regra de cálculo parte dos jogos dos times e não da atuação dos jogadores.  Por fim, o ranking deve ser montado em vista da pontuação geral e não da média básica geral. 
+
+- Bloco “Por mando”:
+  - Determina o mando de cada time na rodada alvo (rodada de referência solicitada no filtro pelo usuário).
+  - Filtra única e exclusivamente os jogos de cada time pelo mando correspondente.
+  - Restringe a janela aos últimos N jogos de cada time no mesmo mando da rodada de referência para garantir que os dados selecionados por jogador atendam a essa regra. Ou seja, se um time na rodada de referência vai jogar como mandante, o filtro “Por mando” obriga o sistema a reunir dados dos jogadores apenas de jogos que cumprem essa regra, ou seja, os últimos N jogos daquele time como mandante. 
+  - Exibe única e exclusivamente os chips desse mando e soma esses jogos como total.
+  - Objetivo: Identificar o desempenho dos jogadores em condições semelhantes às que terá na rodada alvo.
+IMPORTANTE
+- Todos os jogadores que atuaram nos N jogos de cada time de acordo com filtro “Por mando” precisam ter seus Scouts identificados, suas pontuações e média básica somadas para criação de um Ranking. No site teremos um filtro de seleção que determina quantos jogadores desse Ranking que vão aparecer no card (3, 5, 7, etc...). 
+Ex. Digamos que o site foi acionado para selecionar os últimos 3 jogos de cada time no filtro por mando “Por mando” e o filtro de seleção do ranking é de 5 jogadores:
+N últimos jogos: 3
+N de jogadores no ranking: 5
+Mando: Por mando
+
+O sistema tem que buscar os últimos 3 jogos de cada time, por data de ocorrência, no mesmo mando (casa ou fora) que acontecerá o jogo na rodada de referência. Cada time, no mesmo mando da rodada de referência (casa ou fora), terá os jogadores que atuaram identificados, seus Scouts identificados e somados, bem como a sua pontuação geral por jogo e sua média basica. Nenhum scout de nenhum jogador pode ser ignorado! A soma geral dos pontos de cada jogador que atuou nos últimos 3 jogos por mando de cada time será usada para preparar um ranking pra criação do card no site. Se o ranking aponta 5 como o número de jogadores por posição a aparecer no card, o card deve mostrar por ordem decrescente os 5 jogadores que mais pontuaram nesses últimos 3 jogos do time, no mando (casa ou fora) em relação à rodada de referência. Mesmo que um jogador tenha atuado em apenas 1 desses 3  jogos, se a pontuação dele alcançada nesse único jogo o coloca no ranking de TOP 5, ele deve entrar no ranking e um único chip de pontuação vai aparecer no card, pois ele atuou apenas uma vez. Isso também vale se o jogador atuou apenas 2 vezes nos últimos 3 jogos do time por mando. 
+O mais importante é o sistema entender que o ranking é montado a partir de uma lógica simples:
+- Últimos N jogos do time são identificados e não os últimos N jogos dos jogadores.
+- O que precisa ser filtrado e calculado são os Scouts, pontos e média básica dos jogadores que atuaram nesses N jogos de cada time de acordo com o filtro de mando, mesmo que muitos deles não apareçam em todos os N jogos. A regra de cálculo parte dos jogos dos times e não da atuação dos jogadores.  
+
+
+
+Funcionalidades da aba
+- Controles no topo:
+  - “Últimas N rodadas”: quantos jogos entram no cálculo.
+  - “Rodada de referência p/ Mando”: define o mando alvo por clube.
+  - “Top N por posição”: quantos jogadores serão mostrados no card em cada posição.
+  - “Página por posição”: escolhe a posição para montar uma página dedicada (para download).
+  - “Mando”: escolhe “Todas” ou “Por mando”; e, se “Por mando” refere-se ao mando de cada time na rodada de referência. 
+
+- Visual:
+  - Colunas por posição, com cartões dos Top N.
+  - Card mostra escudo do time, nome do jogador, total grande, Média de pontos por jogo (média de pontos/X jogos selecionados), total de média básica, média de média básica por jogo (Total de média básica/X jogos selecionados) e os chips dos jogos (com escudo do adversário, pontuação por jogo, Scouts conquistados e identificação do mando por cor). Abaixo, uma linha com a soma total dos Scouts positivos e negativos.
+  - Legenda indica casa/fora, com “casa” pintando o chip de amarelo claro e azul pintando o chip de mando “fora”. 
+  - Botão “Baixar PNG” exporta o visual atual em altíssima e máxima resolução.
+- Saídas auxiliares:
+  - JSON do ranking para consumo externo.
+  - Ponto de debug que ajuda a auditar cálculo por posição/rodada.

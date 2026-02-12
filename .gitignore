@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Env
+venv/
+env/
+.env
+
+# Temp Files created by app
+temp_c.xlsx
+temp_r.txt
+
+# Large Files / Backups
+*.zip
+*.bak
+
+# OS
+.DS_Store
+Thumbs.db
