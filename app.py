@@ -7,6 +7,40 @@ import base64
 # Configuração da Página
 st.set_page_config(layout="wide", page_title="Ranking Cartola", page_icon="⚽")
 
+# --- Autenticação ---
+if 'authenticated' not in st.session_state:
+    st.session_state.authenticated = False
+
+def check_password():
+    if st.session_state.authenticated:
+        return True
+    
+    st.markdown("""
+        <style>
+        .stTextInput > div > div > input {
+            text-align: center; 
+            font-size: 20px;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns([1,1,1])
+    with col2:
+        st.write("## 🔒 Acesso Restrito")
+        placeholder = st.empty()
+        pwd = placeholder.text_input("Digite o PIN de acesso:", type="password", key="login_pwd")
+        
+        if pwd:
+            if pwd == "1979":
+                st.session_state.authenticated = True
+                st.rerun()
+            else:
+                st.error("🚫 PIN Incorreto")
+    return False
+
+if not check_password():
+    st.stop()
+
 # --- Helper Assets ---
 def get_base64_encoded(file_path):
     if not os.path.exists(file_path):
