@@ -73,7 +73,7 @@ def render_custom_css():
         font-style: normal;
     }}
     
-    /* Fixed Styles for Robust Rendering */
+    /* Scoped Styles for Report Only */
     .report-container {{
         font-family: 'Decalotype', sans-serif;
         width: 1200px;
@@ -81,46 +81,92 @@ def render_custom_css():
         margin: 0 auto;
         background-image: url(data:image/png;base64,{bg_b64});
         background-size: cover;
-        background-position: top center; 
-        background-repeat: repeat-y; /* Ensure bg repeats if long */
-        padding: 50px 40px 60px 40px; 
-        box-sizing: border-box;
+        background-position: center;
+        background-repeat: no-repeat;
+        padding: 120px 40px 80px 40px; /* Mantendo padding original que funcionava visualmente */
+        min-height: auto;
         color: white;
-        display: block; /* Revert to block */
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        font-variant-numeric: lining-nums;
         position: relative;
     }}
     
-    /* ... Header Styles ... */
+    /* Header Styles */
     .tcc-header {{
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 40px;
+        margin-bottom: 20px;
     }}
     
-    /* Card Player - Using Flex but with strict containment */
+    .logo-box {{
+        width: 160px;
+        display: flex;
+        justify-content: center;
+    }}
+    .logo-img {{
+        width: 100%;
+        height: auto;
+    }}
+    
+    .title-box {{
+        text-align: center;
+        flex-grow: 1;
+    }}
+    
+    .main-title-badge {{
+        background-color: #0f382e;
+        color: white;
+        padding: 12px 50px;
+        border-radius: 15px;
+        font-size: 42px;
+        font-weight: 800;
+        text-transform: uppercase;
+        display: inline-block;
+        margin-bottom: 25px;
+        border: 2px solid #14483A;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }}
+    
+    .sub-title {{
+        font-size: 32px;
+        font-weight: 800;
+        color: #0f382e;
+        font-style: italic;
+        text-transform: uppercase;
+    }}
+    
+    .section-title {{
+        font-size: 26px;
+        font-weight: 800;
+        color: black;
+        text-align: center;
+        margin: 100px 0 15px 0;
+        font-style: italic;
+        text-transform: uppercase;
+    }}
+
+    /* Card Player */
     .player-card {{
         background-color: #14483A;
         border: 2px solid #1E7C5C;
         border-radius: 25px;
-        padding: 20px 25px;
-        margin-bottom: 30px;
+        padding: 15px 25px 30px 25px; /* Aumentado padding bottom */
+        margin-bottom: 25px;
         display: flex;
-        flex-direction: row;
-        align-items: flex-start; 
+        align-items: center;
         justify-content: space-between;
         box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         position: relative;
-        min-height: 160px; /* Force minimum height */
     }}
     
     .card-left {{
         display: flex;
         align-items: center;
-        width: 35%; /* Fixed width */
-        min-width: 380px;
-        margin-right: 20px;
-        padding-top: 5px;
+        gap: 25px;
+        min-width: 400px;
     }}
     
     .player-circle {{
@@ -171,23 +217,21 @@ def render_custom_css():
         display: flex;
         flex-direction: column; 
         align-items: flex-end;
-        width: 65%; /* Fixed width */
-        flex-grow: 1;
-        box-sizing: border-box; /* CORREÇÃO: Inclui padding no cálculo */
+        gap: 8px;
+        width: 65%; /* Largura fixa para evitar compressão */
+        max-width: 800px;
     }}
     
     .chips-row {{
         display: flex;
+        gap: 6px;
         flex-wrap: wrap; 
         justify-content: flex-end; 
-        margin-bottom: 15px; /* Explicit space */
         width: 100%;
     }}
     
+    /* Chips */
     .game-chip {{
-        margin-left: 8px; 
-        margin-bottom: 8px;
-        background-color: #f0f0f0; /* Default */
         border-radius: 50px;
         padding: 4px 10px;
         display: flex;
@@ -241,10 +285,12 @@ def render_custom_css():
     /* Total Scouts Bar */
     .scouts-bar {{
         background-color: #0f382e;
-        padding: 10px 15px;
+        padding: 6px 15px;
         border-radius: 12px;
         display: flex;
-        flex-wrap: wrap; 
+        gap: 10px;
+        margin-top: 5px;
+        flex-wrap: wrap;
         justify-content: flex-end;
         width: 100%; /* Full width of parent */
         margin-top: auto; /* Push to bottom if flex container grows */
@@ -433,11 +479,20 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
             <div class="logo-box">{logo_img_tag}</div>
         </div>
         
-        <!-- LEGEND - Wrapper for safety -->
-        <div style="text-align: right; margin-bottom: 10px; padding-right: 10px;">
-             <span style="display:inline-block; width:12px; height:12px; background:#ffe8cc; border-radius:50%; margin-right:5px;"></span> <b style="color:#333; margin-right:15px;">CASA</b>
-             <span style="display:inline-block; width:12px; height:12px; background:#dbeafe; border-radius:50%; margin-right:5px;"></span> <b style="color:#333;">FORA</b>
+        <!-- LEGEND - Aligned Right & Pushed Down -->
+        <div style="display: flex; justify-content: flex-end; gap: 20px; margin-bottom: -10px; margin-top: 50px; max-width: 1000px; margin-left: auto; margin-right: auto; padding-right: 15px; position: relative; z-index: 10;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <div style="width: 16px; height: 16px; background-color: #ffe8cc; border-radius: 50%; border: 1px solid #ccc;"></div>
+                <span style="font-weight: bold; color: #333; font-size: 14px;">CASA</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <div style="width: 16px; height: 16px; background-color: #dbeafe; border-radius: 50%; border: 1px solid #ccc;"></div>
+                <span style="font-weight: bold; color: #333; font-size: 14px;">FORA</span>
+            </div>
         </div>
+        
+        <!-- SECTION 1: POR MANDO (Glued to Legend) -->
+        <div class="section-title" style="margin-top: 0px;">Últimos {n_jogos} jogos por mando</div>
 
     """
     
