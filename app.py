@@ -153,13 +153,15 @@ def render_custom_css():
         background-color: #14483A;
         border: 2px solid #1E7C5C;
         border-radius: 25px;
-        padding: 15px 25px;
-        margin-bottom: 15px;
+        padding: 15px 25px 25px 25px; /* CORREÇÃO: Aumentado padding inferior de 15px para 25px */
+        margin-bottom: 25px; /* CORREÇÃO: Aumentado de 15px para 25px */
         display: flex;
         align-items: center;
         justify-content: space-between;
         box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        position: relative; /* CORREÇÃO: Garante contenção dos elementos filhos */
+        overflow: visible; /* CORREÇÃO: Permite que scouts bar seja visível */
     }}
     
     .card-left {{
@@ -287,8 +289,11 @@ def render_custom_css():
         padding: 6px 15px;
         border-radius: 12px;
         display: flex;
+        flex-wrap: wrap; /* CORREÇÃO: Permite quebra de linha se necessário */
         gap: 10px;
-        margin-top: 4px;
+        margin-top: 8px; /* CORREÇÃO: Aumentado de 4px para 8px */
+        max-width: 100%; /* CORREÇÃO: Garante que não ultrapasse o card */
+        box-sizing: border-box; /* CORREÇÃO: Inclui padding no cálculo de largura */
     }}
     
     .scout-item {{
