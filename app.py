@@ -76,21 +76,103 @@ def render_custom_css():
     /* Scoped Styles for Report Only */
     .report-container {{
         font-family: 'Decalotype', sans-serif;
-        width: 100%;
+        width: 1200px; /* Fixed width for consistency */
         max-width: 1200px;
         margin: 0 auto;
         background-image: url(data:image/png;base64,{bg_b64});
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        background-repeat: no-repeat;
-        padding: 120px 40px 80px 40px; /* CORREÇÃO DO BUG: Bottom aumentado de 0px para 80px */
-        min-height: auto;
+        padding: 50px 40px 40px 40px; 
+        min-height: 1400px; /* Ensure minimum height */
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        box-sizing: border-box;
         color: white;
         -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
-        font-variant-numeric: lining-nums;
+    }}
+    
+    /* ... Header Styles ... */
+
+    /* Card Player */
+    .player-card {{
+        background-color: #14483A;
+        border: 2px solid #1E7C5C;
+        border-radius: 25px;
+        padding: 20px 25px;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: flex-start; /* Safer than center for variable height */
+        justify-content: space-between;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        position: relative;
+        overflow: visible;
+        height: auto;
+    }}
+    
+    .card-left {{
+        display: flex;
+        align-items: center;
+        margin-right: 20px; /* Replace gap */
+        min-width: 380px;
+        padding-top: 5px; /* Visual alignment with flex-start */
+    }}
+    
+    /* ... */
+    
+    .card-right {{
+        display: flex;
+        flex-direction: column; 
+        align-items: flex-end;
+        width: 100%; 
+        max-width: 65%; /* Restricting width to force predictable wrapping */
+        box-sizing: border-box;
+    }}
+    
+    .chips-row {{
+        display: flex;
+        flex-wrap: wrap; 
+        justify-content: flex-end; 
+        margin-bottom: 10px; /* Spacing between chips and scouts */
+    }}
+    
+    .game-chip {{
+        margin-left: 6px; /* Replace gap */
+        margin-bottom: 6px;
+        /* ... rest of chip styles ... */
+    }}
+    
+    /* Total Scouts Bar */
+    .scouts-bar {{
+        background-color: #0f382e;
+        padding: 8px 15px;
+        border-radius: 12px;
+        display: flex;
+        flex-wrap: wrap; 
+        width: auto; /* Let it shrink/grow */
+        max-width: 100%;
+        justify-content: flex-end;
+        align-self: flex-end; /* Align to right */
+    }}
+    
+    .scout-item, .scout-neg {{
+        margin-left: 10px; /* Replace gap */
+    }}
+
+    /* Footer - Sticky at bottom */
+    .tcc-footer {{
+        background-color: #0f382e;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        margin-top: auto; /* Pushes to bottom */
+        width: 100%;
+        border-radius: 15px;
+        box-sizing: border-box;
     }}
     
     /* Header Styles */
@@ -447,58 +529,40 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
             const element = document.querySelector('.report-container');
             const originalText = btn.innerText;
 
-            btn.innerText = "⏳ Gerando Alta Definição...";
+            btn.innerText = "⏳ Processando...";
             btn.disabled = true;
             
+            // Force layout recalc
             await document.fonts.ready;
-            await new Promise(r => setTimeout(r, 500)); 
-
-            const filter = (node) => {{
-                return (node.id !== 'btn-download');
-            }};
-
-            const width = element.scrollWidth;
-            const height = element.scrollHeight + 50;
-
+            
+            // Fixed dimensions for consistent rendering
+            const targetWidth = 1200;
+            
             const config = {{
-                quality: 0.95,
-                backgroundColor: null,
-                filter: filter,
-                width: width,
-                height: height,
+                quality: 1.0,
+                width: targetWidth,
+                height: element.offsetHeight + 5, // Exact height capture
                 style: {{
+                    'transform': 'none',
                     'margin': '0',
-                    'overflow': 'visible'
-                }}
-            }};
-
-            const trigger = (dataUrl, suffix) => {{
-                const link = document.createElement('a');
-                link.download = `Ranking_{position}_{rodada}_${{suffix}}.png`;
-                link.href = dataUrl;
-                link.click();
+                    'width': '1200px', // Force width in render
+                    'min-height': '1400px' // Ensure background covers
+                }},
+                cacheBust: true,
             }};
 
             try {{
-                console.log("Tentando html-to-image 2.0x...");
-                const dataUrl = await htmlToImage.toPng(element, {{ ...config, pixelRatio: 2.0 }});
-                trigger(dataUrl, 'FULL_HD');
+                // 1.5x scale is usually sufficient and stable
+                const dataUrl = await htmlToImage.toPng(element, {{ ...config, pixelRatio: 1.5 }});
+                
+                const link = document.createElement('a');
+                link.download = `Ranking_{position}_{rodada}.png`;
+                link.href = dataUrl;
+                link.click();
                 
             }} catch (err) {{
-                console.warn("Erro 2.0x:", err);
-                try {{
-                    console.log("Tentando 1.5x...");
-                    const dataUrl = await htmlToImage.toPng(element, {{ ...config, pixelRatio: 1.5 }});
-                    trigger(dataUrl, 'HD');
-                }} catch (err2) {{
-                     console.error("Erro fatal:", err2);
-                     try {{
-                        const dataUrl = await htmlToImage.toPng(element, {{ ...config, pixelRatio: 1 }});
-                        trigger(dataUrl, 'SD');
-                     }} catch(err3) {{
-                         alert("Erro fatal ao gerar imagem. Tente reduzir o número de jogos.");
-                     }}
-                }}
+                console.error("Erro:", err);
+                alert("Erro ao gerar imagem. Tente novamente.");
             }} finally {{
                 btn.innerText = originalText;
                 btn.disabled = false;
