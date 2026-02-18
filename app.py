@@ -84,8 +84,10 @@ def render_custom_css():
         background-position: center;
         background-repeat: no-repeat;
         background-repeat: no-repeat;
-        padding: 120px 40px 0px 40px; /* Top: 120px (Lower Header), Bottom: 0px (Footer Flush) */
+        padding: 120px 40px 60px 40px; /* Top: 120px (Lower Header), Bottom: 60px (Extra Space for Footer) */
         min-height: auto; /* Fix "Stretching" - wrap content only */
+        display: flex;
+        flex-direction: column;
         color: white;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -154,7 +156,7 @@ def render_custom_css():
         border: 2px solid #1E7C5C;
         border-radius: 25px;
         padding: 15px 25px;
-        margin-bottom: 15px;
+        margin-bottom: 20px; /* Increased from 15px to 20px for better spacing */
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -219,6 +221,7 @@ def render_custom_css():
         align-items: flex-end;
         gap: 8px;
         max-width: 68%; /* Increased from 60% to help chips fit in one line */
+        min-height: 80px; /* Force minimum height to prevent overlap */
     }}
     
     .chips-row {{
@@ -312,10 +315,11 @@ def render_custom_css():
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 15px;
-        margin-top: 160px; /* Increased to 160px to push footer significantly down */
+        padding: 20px 15px; /* Increased vertical padding */
+        margin-top: 180px; /* Increased to 180px to push footer significantly down */
         border-radius: 0 0 15px 15px; /* Rounded bottom if container is rounded */
         position: relative;
+        flex-shrink: 0; /* Prevent footer from shrinking */
     }}
     .footer-content {{
          display: flex;
@@ -455,9 +459,9 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
                 return (node.id !== 'btn-download');
             }};
 
-            // Calculate precise dimensions
+            // Calculate precise dimensions with generous buffer
             const width = element.scrollWidth;
-            const height = element.scrollHeight + 50; // Extra buffer
+            const height = element.scrollHeight + 200; // Increased buffer from 50 to 200 for footer and last card
 
             const config = {{
                 quality: 0.95,
