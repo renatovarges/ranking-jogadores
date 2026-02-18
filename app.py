@@ -76,20 +76,21 @@ def render_custom_css():
     /* Scoped Styles for Report Only */
     .report-container {{
         font-family: 'Decalotype', sans-serif;
-        width: 1200px;
+        width: 100%;
         max-width: 1200px;
         margin: 0 auto;
         background-image: url(data:image/png;base64,{bg_b64});
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        padding: 120px 40px 80px 40px; /* Mantendo padding original que funcionava visualmente */
-        min-height: auto;
+        background-repeat: no-repeat;
+        padding: 120px 40px 0px 40px; /* Top: 120px (Lower Header), Bottom: 0px (Footer Flush) */
+        min-height: auto; /* Fix "Stretching" - wrap content only */
         color: white;
         -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
-        font-variant-numeric: lining-nums;
-        position: relative;
+        font-variant-numeric: lining-nums; /* Fix 'crooked' numbers */
     }}
     
     /* Header Styles */
@@ -124,7 +125,7 @@ def render_custom_css():
         font-weight: 800;
         text-transform: uppercase;
         display: inline-block;
-        margin-bottom: 25px;
+        margin-bottom: 25px; /* Increased from 5px to separate subtitle */
         border: 2px solid #14483A;
         box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     }}
@@ -142,7 +143,7 @@ def render_custom_css():
         font-weight: 800;
         color: black;
         text-align: center;
-        margin: 100px 0 15px 0;
+        margin: 100px 0 15px 0; /* Increased to 100px to push Table 2 down */
         font-style: italic;
         text-transform: uppercase;
     }}
@@ -152,14 +153,13 @@ def render_custom_css():
         background-color: #14483A;
         border: 2px solid #1E7C5C;
         border-radius: 25px;
-        padding: 20px 25px 40px 25px; /* Huge bottom padding to prevent overlay */
-        margin-bottom: 40px; /* Huge margin to separate cards */
+        padding: 15px 25px;
+        margin-bottom: 15px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        position: relative;
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; /* Clean font for data */
     }}
     
     .card-left {{
@@ -167,68 +167,155 @@ def render_custom_css():
         align-items: center;
         gap: 25px;
         min-width: 400px;
-        flex-shrink: 0;
     }}
     
-    /* ... */
+    .player-circle {{
+        width: 85px; /* Size of the circle container */
+        height: 85px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 4px solid white;
+        overflow: hidden; /* Ensure image stays inside */
+        box-shadow: 0 0 15px rgba(0,0,0,0.7); /* Elegant Shadow */
+    }}
+    .player-circle img {{
+        width: 95%; /* Increased logo size inside circle */
+        height: auto;
+        object-fit: contain;
+    }}
+    
+    .info-block h3 {{
+        margin: 0;
+        font-size: 28px;
+        font-weight: 800;
+        text-transform: uppercase;
+        line-height: 1;
+        color: white;
+        font-family: 'Decalotype', sans-serif; /* Keep Display Font for Name */
+    }}
+    
+    .total-score {{
+        font-size: 46px; 
+        font-weight: 800;
+        color: #2ecc71;
+        line-height: 1;
+        margin-top: 2px;
+    }}
+    
+    .media-score {{
+        font-size: 18px; /* Increased from 14px */
+        color: #e5e7eb;
+        font-weight: 500;
+        margin-top: 5px;
+        opacity: 0.9;
+    }}
     
     .card-right {{
         display: flex;
         flex-direction: column; 
         align-items: flex-end;
         gap: 8px;
-        flex: 1; /* Allow to grow */
-        min-width: 0; /* Prevent flex blowout */
-        margin-left: 20px;
+        max-width: 68%; /* Increased from 60% to help chips fit in one line */
     }}
     
     .chips-row {{
         display: flex;
-        gap: 6px;
+        gap: 6px; /* Compact gap from 8px */
         flex-wrap: wrap; 
         justify-content: flex-end; 
-        width: 100%;
+        max-width: 1000px; 
     }}
     
     /* Chips */
     .game-chip {{
         border-radius: 50px;
-        padding: 4px 10px;
+        padding: 4px 10px; /* Reduced padding from 5px 12px */
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 8px; /* Reduced gap inside chip */
         height: 48px; 
     }}
     
     .bg-casa {{ background-color: #ffe8cc; color: #333; }}
     .bg-fora {{ background-color: #dbeafe; color: #333; }}
     
-    /* ... */
+    .chip-logo-circle {{
+        width: 38px; 
+        height: 38px;
+        background-color: white;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        flex-shrink: 0;
+    }}
+    
+    .chip-adversario {{
+        width: 95%; /* Maximized logo size inside circle */
+        height: 95%;
+        object-fit: contain;
+    }}
+    
+    .chip-content {{
+        display: flex;
+        flex-direction: column; 
+        justify-content: center;
+        line-height: 1;
+    }}
+
+    .chip-score {{
+        font-size: 19px; /* Slightly bigger */
+        font-weight: 800;
+        color: #111;
+        white-space: nowrap; 
+    }}
+    
+    .chip-scouts {{
+        font-size: 14px;
+        font-weight: 800;
+        color: #333;
+        white-space: nowrap;
+    }}
     
     /* Total Scouts Bar */
     .scouts-bar {{
         background-color: #0f382e;
-        padding: 8px 15px;
+        padding: 6px 15px;
         border-radius: 12px;
         display: flex;
         gap: 10px;
-        margin-top: 5px;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-        max-width: 100%;
+        margin-top: 4px;
     }}
     
-    /* Footer - Natural Flow with Margin */
+    .scout-item {{
+        font-size: 15px;
+        font-weight: 700; /* Validated Bold */
+        color: #00e676; 
+    }}
+    .scout-neg {{ 
+        font-size: 15px;
+        font-weight: 700; /* Validated Bold matching positive */
+        color: #ff5252; 
+    }} 
+    
+    /* Scoped colors for inside chips too */
+    .chip-scout-pos {{ color: #008f4c; }} 
+    
+    /* Footer */
     .tcc-footer {{
         background-color: #0f382e;
         color: white;
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 20px;
-        margin-top: 150px; /* Massive margin to ensure it stays at bottom */
-        border-radius: 0 0 15px 15px;
-        clear: both;
+        padding: 15px;
+        margin-top: 160px; /* Increased to 160px to push footer significantly down */
+        border-radius: 0 0 15px 15px; /* Rounded bottom if container is rounded */
+        position: relative;
     }}
     .footer-content {{
          display: flex;
@@ -280,6 +367,7 @@ def sort_scouts(scouts_dict):
     1. Positive scouts (Desc quantity)
     2. Negative scouts (Desc quantity)
     """
+    # Define Negative Keys
     neg_keys = ['GS', 'PP', 'FC', 'I', 'PI', 'CA', 'CV', 'PC', 'GC']
     
     pos_list = []
@@ -292,12 +380,14 @@ def sort_scouts(scouts_dict):
         else:
             pos_list.append((k, v))
             
+    # Sort descending by value (v)
     pos_list.sort(key=lambda x: x[1], reverse=True)
     neg_list.sort(key=lambda x: x[1], reverse=True)
     
     return pos_list, neg_list
 
 def render_full_report_dual(position, rodada, players_mando, players_geral, n_jogos):
+    # Assets
     logo_tcc_path = os.path.join("assets", "logos", "logo_tcc.png")
     logo_white_path = os.path.join("assets", "logos", "logo_tcc_branco.png")
     
@@ -315,21 +405,38 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
     <head>
         <meta charset="UTF-8">
         <title>Ranking {position} - Rodada {rodada}</title>
+        <!-- html-to-image (Modern, Robust) -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
         <style>
+            /* Reset */
             body {{ margin: 0; padding: 0; background-color: #f0f2f6; }}
             {css}
             
+            /* Floating Download Button */
             #btn-download {{
                 position: fixed;
-                top: 20px; right: 20px; z-index: 9999;
-                padding: 15px 30px; border-radius: 10px; border:none;
-                background: #1E7C5C; color: white; font-weight: bold; cursor: pointer;
+                top: 20px;
+                right: 20px;
+                background-color: #1E7C5C;
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-family: sans-serif;
+                font-weight: bold;
+                cursor: pointer;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                z-index: 9999;
+                transition: all 0.3s ease;
+            }}
+            #btn-download:hover {{
+                background-color: #14483A;
+                transform: scale(1.05);
             }}
         </style>
     </head>
     <body>
-    <button id="btn-download" onclick="downloadPNG()">📸 BAIXAR (SISTEMA DE SEGURANÇA)</button>
+    <button id="btn-download" onclick="downloadPNG()">📸 BAIXAR ARTE (NOVO MOTOR)</button>
     
     <script>
         async function downloadPNG() {{
@@ -337,38 +444,63 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
             const element = document.querySelector('.report-container');
             const originalText = btn.innerText;
 
-            btn.innerText = "⏳ Processando...";
+            btn.innerText = "⏳ Gerando Alta Definição...";
             btn.disabled = true;
             
+            // Wait for fonts and layout
             await document.fonts.ready;
-            
-            // Calculate height with a safety buffer
-            const bodyHeight = element.scrollHeight;
-            const targetHeight = bodyHeight + 50; 
-            
+            await new Promise(r => setTimeout(r, 500)); 
+
+            const filter = (node) => {{
+                return (node.id !== 'btn-download');
+            }};
+
+            // Calculate precise dimensions
+            const width = element.scrollWidth;
+            const height = element.scrollHeight + 50; // Extra buffer
+
             const config = {{
-                quality: 1.0,
-                width: 1200,
-                height: targetHeight,
+                quality: 0.95,
+                backgroundColor: null,
+                filter: filter,
+                width: width,
+                height: height,
                 style: {{
-                    'transform': 'none',
                     'margin': '0',
-                }},
-                cacheBust: true,
+                    'overflow': 'visible' // Force visibility
+                }}
+            }};
+
+            const trigger = (dataUrl, suffix) => {{
+                const link = document.createElement('a');
+                link.download = `Ranking_{position}_{rodada}_${{suffix}}.png`;
+                link.href = dataUrl;
+                link.click();
             }};
 
             try {{
-                // Use 2.0x for sharpness, but standard pixel ratio
+                // Try 2.0x Pixel Ratio (True High Definition)
+                console.log("Tentando html-to-image 2.0x...");
                 const dataUrl = await htmlToImage.toPng(element, {{ ...config, pixelRatio: 2.0 }});
-                
-                const link = document.createElement('a');
-                link.download = `Ranking_{position}_{rodada}_Fixed.png`;
-                link.href = dataUrl;
-                link.click();
+                trigger(dataUrl, 'FULL_HD');
                 
             }} catch (err) {{
-                console.error("Erro:", err);
-                alert("Erro ao gerar. Tente novamente.");
+                console.warn("Erro 2.0x:", err);
+                try {{
+                    // Fallback to 1.5x
+                    console.log("Tentando 1.5x...");
+                    const dataUrl = await htmlToImage.toPng(element, {{ ...config, pixelRatio: 1.5 }});
+                    trigger(dataUrl, 'HD');
+                }} catch (err2) {{
+                     console.error("Erro fatal:", err2);
+                     // Final fallback: 1.0x
+                     try {{
+                        const dataUrl = await htmlToImage.toPng(element, {{ ...config, pixelRatio: 1 }});
+                        trigger(dataUrl, 'SD');
+                     }} catch(err3) {{
+                         alert("Erro fatal ao gerar imagem. Tente reduzir o número de jogos.");
+                     }}
+                }}
             }} finally {{
                 btn.innerText = originalText;
                 btn.disabled = false;
@@ -400,9 +532,9 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
         
         <!-- SECTION 1: POR MANDO (Glued to Legend) -->
         <div class="section-title" style="margin-top: 0px;">Últimos {n_jogos} jogos por mando</div>
-
     """
     
+    # Helper Card Render
     def render_cards(players):
         cards_html = ""
         for i, p in enumerate(players):
@@ -415,20 +547,26 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
             team_logo = get_team_logo_path(time)
             team_b64 = img_to_b64(team_logo)
             
+            # Chips
             chips_content = ""
             for jogo in p['Jogos']:
                 bg_class = "bg-casa" if jogo['Casa'] else "bg-fora"
                 opp_logo = get_team_logo_path(jogo['Adversario'])
                 opp_b64 = img_to_b64(opp_logo)
                 
+                # Sorting Scouts for Chip
                 pos_s, neg_s = sort_scouts(jogo['Scouts'])
                 
+                # Format: 9DE 2SG 1GS
+                # Use simple text or colored? User said "misturado".
+                # Text logic:
                 txt_list = [f"{v}{k}" for k,v in pos_s] + [f"{v}{k}" for k,v in neg_s]
                 scouts_final = " ".join(txt_list)
                 
                 opp_img_tag = f'<img src="data:image/png;base64,{opp_b64}" class="chip-adversario"/>' if opp_b64 else ''
                 opp_wrapper = f'<div class="chip-logo-circle">{opp_img_tag}</div>' if opp_b64 else ''
                 
+                # Pre-format score to avoid f-string syntax errors
                 score_val = jogo['Pontos']
                 score_str = f"{score_val:.2f}"
                 
@@ -441,14 +579,17 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
                 </div>
                 """
             
+            # Total Scouts
             t_pos, t_neg = sort_scouts(p['Scouts'])
             
+            # Render with Colors
             rendered_scouts = []
             for k, v in t_pos:
                 rendered_scouts.append(f'<span class="scout-item">{v}{k}</span>')
             for k, v in t_neg:
                 rendered_scouts.append(f'<span class="scout-neg">{v}{k}</span>')
             
+            # Display all relevant scouts, no limit
             total_scouts_html = " ".join(rendered_scouts) 
             
             cards_html += f"""
@@ -470,8 +611,6 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
                     <div class="scouts-bar">
                         {total_scouts_html}
                     </div>
-                    <!-- Spacer to force height in html-to-image -->
-                    <div style="height: 10px; width: 100%; clear: both;"></div>
                 </div>
             </div>
             """
@@ -480,12 +619,14 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
     html += render_cards(players_mando)
     
     html += f"""
+        <!-- SECTION 2: GERAL -->
         <div class="section-title">Últimos {n_jogos} jogos gerais</div>
     """
     
     html += render_cards(players_geral)
     
     html += f"""
+        <!-- FOOTER -->
         <div class="tcc-footer">
             <div class="footer-content">
                 {footer_logo_tag}
@@ -502,10 +643,12 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
 st.markdown(f"<style>{render_custom_css()}</style>", unsafe_allow_html=True)
 st.title("Geração de Rankings (Modo Arte Final)")
 
+# Constantes
 DEFAULT_RODADAS = os.path.join("input", "RODADAS_BRASILEIRAO_2026.txt")
 DEFAULT_CLASSIF_XLSX = os.path.join("input", "DIVISÃO VOLANTES E MEIAS.xlsx")
 DEFAULT_CLASSIF_CSV = os.path.join("input", "classificacao_meias_volantes.csv")
 
+# Sidebar
 with st.sidebar:
     st.header("1. Upload de Dados")
     uploaded_api = st.file_uploader("Planilha API (Excel)", type=["xlsx"])
@@ -523,10 +666,12 @@ with st.sidebar:
     n_jogos = st.number_input("Últimos N Jogos", 1, 10, 3)
     rodada_ref = st.number_input("Rodada Atual (Referência)", 1, 38, 2)
     top_n = st.number_input("Top Jogadores", 1, 20, 5)
+    # Filtro Mando removido da UI (automático)
     filtro_pos = st.selectbox("Posição", ["Todas", "Goleiro", "Lateral", "Zagueiro", "Volante", "Meia", "Atacante"])
     
     btn_run = st.button("GERAR ARTES", type="primary")
 
+# Main
 if btn_run and uploaded_api:
     with st.spinner("Gerando arte dupla..."):
         df = utils.load_data(uploaded_api)
@@ -560,22 +705,26 @@ if btn_run and uploaded_api:
             if pos == 'Lateral': filter_p = ['Lateral', 'Lat']
             if pos == 'Zagueiro': filter_p = ['Zagueiro', 'Zag']
             
+            # Ranking 1: Por Mando
             rank_mando = utils.process_ranking(df, n_jogos, "Por Mando", rodada_ref, rodadas_data, top_n, filter_p, pos_map)
+            
+            # Ranking 2: Geral (Todas)
             rank_geral = utils.process_ranking(df, n_jogos, "Todas", rodada_ref, rodadas_data, top_n, filter_p, pos_map)
             
             if not rank_mando and not rank_geral:
                 st.warning(f"Sem dados para {pos}")
                 continue
                 
+            # Render Dual HTML
             full_html = render_full_report_dual(pos.upper(), rodada_ref, rank_mando, rank_geral, n_jogos)
             
             st.subheader(f"🎨 Resultado: {pos}")
             st.components.v1.html(full_html, height=1200, scrolling=True)
             
+            # Download
             b64_html = base64.b64encode(full_html.encode("utf-8")).decode()
             href = f'<a href="data:text/html;base64,{b64_html}" download="Ranking_{pos}_{rodada_ref}.html" style="padding:15px; background: #1E7C5C; color:white; text-decoration:none; border-radius:8px; font-weight:bold; display:block; text-align:center;">📥 BAIXAR ARTE {pos.upper()} (HTML)</a>'
             st.markdown(href, unsafe_allow_html=True)
 
 elif btn_run and not uploaded_api:
     st.error("⚠️ Necessário fazer upload da Planilha API.")
-
