@@ -84,10 +84,9 @@ def render_custom_css():
         background-position: center;
         background-repeat: no-repeat;
         background-repeat: no-repeat;
-        padding: 120px 40px 40px 40px; /* Top: 120px (Lower Header), Bottom: 40px */
-        min-height: 100vh; /* Force minimum viewport height */
-        display: flex;
-        flex-direction: column;
+        padding: 120px 40px 40px 40px; /* Top: 120px, Bottom: 40px for footer spacing */
+        min-height: auto; /* Fix "Stretching" - wrap content only */
+        overflow: hidden; /* CRITICAL: Prevent any content from leaking outside */
         color: white;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -155,21 +154,23 @@ def render_custom_css():
         background-color: #14483A;
         border: 2px solid #1E7C5C;
         border-radius: 25px;
-        padding: 20px 25px; /* Increased from 15px to 20px */
-        margin-bottom: 25px; /* Increased from 20px to 25px for better spacing */
+        padding: 15px 20px;
+        margin-bottom: 15px;
         display: flex;
-        align-items: flex-start; /* Changed from center to flex-start */
+        align-items: center;
         justify-content: space-between;
         box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; /* Clean font for data */
-        min-height: 180px; /* Added minimum height to prevent compression */
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        overflow: hidden; /* CRITICAL: Cut anything that leaks outside the card */
+        position: relative; /* Establish containing block */
     }}
     
     .card-left {{
         display: flex;
         align-items: center;
-        gap: 25px;
-        min-width: 400px;
+        gap: 20px;
+        min-width: 300px;
+        flex-shrink: 0;
     }}
     
     .player-circle {{
@@ -220,29 +221,29 @@ def render_custom_css():
         display: flex;
         flex-direction: column; 
         align-items: flex-end;
-        gap: 12px;
-        width: 75%; /* Fixed width instead of max-width */
-        min-height: 150px; /* DRASTICALLY increased from 100px to 150px */
-        flex-shrink: 0; /* Prevent shrinking */
+        gap: 6px;
+        flex: 1; /* CRITICAL: Take remaining space after card-left */
+        min-width: 0; /* CRITICAL: Allow flex item to shrink below content size */
+        overflow: hidden; /* CRITICAL: Prevent chips from overflowing */
     }}
     
     .chips-row {{
         display: flex;
-        gap: 10px; /* Increased from 8px for better spacing */
+        gap: 5px;
         flex-wrap: wrap; 
         justify-content: flex-end; 
-        width: 100%; /* Use full width available */
-        align-items: flex-start; /* Align items to start */
+        width: 100%; /* CRITICAL: Respect parent width, not arbitrary 1000px */
     }}
     
     /* Chips */
     .game-chip {{
         border-radius: 50px;
-        padding: 4px 10px; /* Reduced padding from 5px 12px */
+        padding: 4px 8px;
         display: flex;
         align-items: center;
-        gap: 8px; /* Reduced gap inside chip */
-        height: 48px; 
+        gap: 6px;
+        height: 44px;
+        flex-shrink: 0; /* Don't compress individual chips */
     }}
     
     .bg-casa {{ background-color: #ffe8cc; color: #333; }}
@@ -274,7 +275,7 @@ def render_custom_css():
     }}
 
     .chip-score {{
-        font-size: 19px; /* Slightly bigger */
+        font-size: 17px;
         font-weight: 800;
         color: #111;
         white-space: nowrap; 
@@ -290,13 +291,13 @@ def render_custom_css():
     /* Total Scouts Bar */
     .scouts-bar {{
         background-color: #0f382e;
-        padding: 8px 15px; /* Increased from 6px to 8px */
+        padding: 5px 12px;
         border-radius: 12px;
         display: flex;
-        gap: 10px;
-        margin-top: 6px; /* Increased from 4px to 6px */
-        flex-wrap: wrap; /* Allow wrapping if needed */
-        max-width: 100%; /* Ensure it doesn't overflow */
+        gap: 8px;
+        margin-top: 2px;
+        flex-wrap: wrap; /* Allow wrapping if many scouts */
+        justify-content: flex-end;
     }}
     
     .scout-item {{
@@ -320,12 +321,10 @@ def render_custom_css():
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 25px 15px; /* Increased vertical padding */
-        margin-top: auto; /* Push footer to bottom using flexbox */
-        border-radius: 0 0 15px 15px; /* Rounded bottom if container is rounded */
+        padding: 18px;
+        margin-top: 80px;
+        border-radius: 0 0 15px 15px;
         position: relative;
-        flex-shrink: 0; /* Prevent footer from shrinking */
-        width: 100%;
     }}
     .footer-content {{
          display: flex;
@@ -465,9 +464,9 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
                 return (node.id !== 'btn-download');
             }};
 
-            // Calculate precise dimensions - force full capture with LARGE buffer
-            const width = Math.max(element.scrollWidth, element.offsetWidth);
-            const height = Math.max(element.scrollHeight, element.offsetHeight) + 300; // DRASTICALLY increased buffer from 100 to 300
+            // Calculate precise dimensions
+            const width = element.scrollWidth;
+            const height = element.scrollHeight;
 
             const config = {{
                 quality: 0.95,
@@ -477,7 +476,7 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
                 height: height,
                 style: {{
                     'margin': '0',
-                    'overflow': 'visible' // Force visibility
+                    'overflow': 'hidden' // CRITICAL: Match CSS - do NOT use 'visible'
                 }}
             }};
 
@@ -528,8 +527,8 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
             <div class="logo-box">{logo_img_tag}</div>
         </div>
         
-        <!-- LEGEND - Aligned Right & Pushed Down -->
-        <div style="display: flex; justify-content: flex-end; gap: 20px; margin-bottom: 15px; margin-top: 30px; padding-right: 0px; position: relative;">
+        <!-- LEGEND - Aligned Right -->
+        <div style="display: flex; justify-content: flex-end; gap: 20px; margin-bottom: -10px; margin-top: 50px; padding-right: 15px; position: relative; z-index: 10;">
             <div style="display: flex; align-items: center; gap: 6px;">
                 <div style="width: 16px; height: 16px; background-color: #ffe8cc; border-radius: 50%; border: 1px solid #ccc;"></div>
                 <span style="font-weight: bold; color: #333; font-size: 14px;">CASA</span>
