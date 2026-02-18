@@ -73,184 +73,54 @@ def render_custom_css():
         font-style: normal;
     }}
     
-    /* Scoped Styles for Report Only */
+    /* Fixed Styles for Robust Rendering */
     .report-container {{
         font-family: 'Decalotype', sans-serif;
-        width: 1200px; /* Fixed width for consistency */
+        width: 1200px;
         max-width: 1200px;
         margin: 0 auto;
         background-image: url(data:image/png;base64,{bg_b64});
         background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        padding: 50px 40px 40px 40px; 
-        min-height: 1400px; /* Ensure minimum height */
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
+        background-position: top center; 
+        background-repeat: repeat-y; /* Ensure bg repeats if long */
+        padding: 50px 40px 60px 40px; 
         box-sizing: border-box;
         color: white;
-        -webkit-font-smoothing: antialiased;
-        text-rendering: optimizeLegibility;
+        display: block; /* Revert to block */
+        position: relative;
     }}
     
     /* ... Header Styles ... */
-
-    /* Card Player */
+    .tcc-header {{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+    }}
+    
+    /* Card Player - Using Flex but with strict containment */
     .player-card {{
         background-color: #14483A;
         border: 2px solid #1E7C5C;
         border-radius: 25px;
         padding: 20px 25px;
-        margin-bottom: 25px;
+        margin-bottom: 30px;
         display: flex;
-        align-items: flex-start; /* Safer than center for variable height */
+        flex-direction: row;
+        align-items: flex-start; 
         justify-content: space-between;
         box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         position: relative;
-        overflow: visible;
-        height: auto;
+        min-height: 160px; /* Force minimum height */
     }}
     
     .card-left {{
         display: flex;
         align-items: center;
-        margin-right: 20px; /* Replace gap */
+        width: 35%; /* Fixed width */
         min-width: 380px;
-        padding-top: 5px; /* Visual alignment with flex-start */
-    }}
-    
-    /* ... */
-    
-    .card-right {{
-        display: flex;
-        flex-direction: column; 
-        align-items: flex-end;
-        width: 100%; 
-        max-width: 65%; /* Restricting width to force predictable wrapping */
-        box-sizing: border-box;
-    }}
-    
-    .chips-row {{
-        display: flex;
-        flex-wrap: wrap; 
-        justify-content: flex-end; 
-        margin-bottom: 10px; /* Spacing between chips and scouts */
-    }}
-    
-    .game-chip {{
-        margin-left: 6px; /* Replace gap */
-        margin-bottom: 6px;
-        /* ... rest of chip styles ... */
-    }}
-    
-    /* Total Scouts Bar */
-    .scouts-bar {{
-        background-color: #0f382e;
-        padding: 8px 15px;
-        border-radius: 12px;
-        display: flex;
-        flex-wrap: wrap; 
-        width: auto; /* Let it shrink/grow */
-        max-width: 100%;
-        justify-content: flex-end;
-        align-self: flex-end; /* Align to right */
-    }}
-    
-    .scout-item, .scout-neg {{
-        margin-left: 10px; /* Replace gap */
-    }}
-
-    /* Footer - Sticky at bottom */
-    .tcc-footer {{
-        background-color: #0f382e;
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-        margin-top: auto; /* Pushes to bottom */
-        width: 100%;
-        border-radius: 15px;
-        box-sizing: border-box;
-    }}
-    
-    /* Header Styles */
-    .tcc-header {{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }}
-    
-    .logo-box {{
-        width: 160px;
-        display: flex;
-        justify-content: center;
-    }}
-    .logo-img {{
-        width: 100%;
-        height: auto;
-    }}
-    
-    .title-box {{
-        text-align: center;
-        flex-grow: 1;
-    }}
-    
-    .main-title-badge {{
-        background-color: #0f382e;
-        color: white;
-        padding: 12px 50px;
-        border-radius: 15px;
-        font-size: 42px;
-        font-weight: 800;
-        text-transform: uppercase;
-        display: inline-block;
-        margin-bottom: 25px;
-        border: 2px solid #14483A;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-    }}
-    
-    .sub-title {{
-        font-size: 32px;
-        font-weight: 800;
-        color: #0f382e;
-        font-style: italic;
-        text-transform: uppercase;
-    }}
-    
-    .section-title {{
-        font-size: 26px;
-        font-weight: 800;
-        color: black;
-        text-align: center;
-        margin: 100px 0 15px 0;
-        font-style: italic;
-        text-transform: uppercase;
-    }}
-
-    /* Card Player */
-    .player-card {{
-        background-color: #14483A;
-        border: 2px solid #1E7C5C;
-        border-radius: 25px;
-        padding: 15px 25px 25px 25px; /* CORREÇÃO: Aumentado padding inferior de 15px para 25px */
-        margin-bottom: 25px; /* CORREÇÃO: Aumentado de 15px para 25px */
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        position: relative; /* CORREÇÃO: Garante contenção dos elementos filhos */
-        overflow: visible; /* CORREÇÃO: Permite que scouts bar seja visível */
-    }}
-    
-    .card-left {{
-        display: flex;
-        align-items: center;
-        gap: 25px;
-        min-width: 400px;
+        margin-right: 20px;
+        padding-top: 5px;
     }}
     
     .player-circle {{
@@ -301,22 +171,23 @@ def render_custom_css():
         display: flex;
         flex-direction: column; 
         align-items: flex-end;
-        gap: 8px;
-        max-width: 80%; /* CORREÇÃO ROBUSTA: Aumentado de 68% para 80% para evitar overflow */
-        width: 100%; /* CORREÇÃO: Garante uso total do espaço disponível */
+        width: 65%; /* Fixed width */
+        flex-grow: 1;
         box-sizing: border-box; /* CORREÇÃO: Inclui padding no cálculo */
     }}
     
     .chips-row {{
         display: flex;
-        gap: 6px;
         flex-wrap: wrap; 
         justify-content: flex-end; 
-        max-width: 1000px; 
+        margin-bottom: 15px; /* Explicit space */
+        width: 100%;
     }}
     
-    /* Chips */
     .game-chip {{
+        margin-left: 8px; 
+        margin-bottom: 8px;
+        background-color: #f0f0f0; /* Default */
         border-radius: 50px;
         padding: 4px 10px;
         display: flex;
@@ -370,43 +241,41 @@ def render_custom_css():
     /* Total Scouts Bar */
     .scouts-bar {{
         background-color: #0f382e;
-        padding: 6px 12px; /* CORREÇÃO: Reduzido padding lateral de 15px para 12px */
+        padding: 10px 15px;
         border-radius: 12px;
         display: flex;
-        flex-wrap: wrap; /* CORREÇÃO: Permite quebra de linha se necessário */
-        gap: 8px; /* CORREÇÃO: Reduzido de 10px para 8px para melhor ajuste */
-        margin-top: 8px;
-        width: 100%; /* CORREÇÃO ROBUSTA: Força largura total do container pai */
-        max-width: 100%; /* CORREÇÃO: Garante que não ultrapasse o card */
-        box-sizing: border-box; /* CORREÇÃO: Inclui padding no cálculo de largura */
-        justify-content: flex-end; /* CORREÇÃO: Alinha à direita como chips */
+        flex-wrap: wrap; 
+        justify-content: flex-end;
+        width: 100%; /* Full width of parent */
+        margin-top: auto; /* Push to bottom if flex container grows */
+        box-sizing: border-box;
     }}
     
-    .scout-item {{
-        font-size: 15px;
+    .scout-item, .scout-neg {{
+        margin-left: 12px;
         font-weight: 700;
-        color: #00e676; 
+        font-size: 16px;
     }}
-    .scout-neg {{ 
-        font-size: 15px;
-        font-weight: 700;
-        color: #ff5252; 
-    }} 
+    
+    .scout-item {{ color: #00e676; }}
+    .scout-neg {{ color: #ff5252; }} 
     
     /* Scoped colors for inside chips too */
     .chip-scout-pos {{ color: #008f4c; }} 
     
-    /* Footer */
+    /* Footer - Natural Flow */
     .tcc-footer {{
         background-color: #0f382e;
         color: white;
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 15px;
-        margin-top: 40px; /* CORREÇÃO ROBUSTA: Reduzido de 160px para 40px */
-        border-radius: 0 0 15px 15px;
-        position: relative;
+        padding: 20px;
+        margin-top: 80px; /* Huge margin to separate */
+        width: 100%;
+        border-radius: 15px;
+        box-sizing: border-box;
+        clear: both;
     }}
     .footer-content {{
          display: flex;
@@ -500,28 +369,14 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
             
             #btn-download {{
                 position: fixed;
-                top: 20px;
-                right: 20px;
-                background-color: #1E7C5C;
-                color: white;
-                border: none;
-                padding: 12px 24px;
-                border-radius: 8px;
-                font-family: sans-serif;
-                font-weight: bold;
-                cursor: pointer;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                z-index: 9999;
-                transition: all 0.3s ease;
-            }}
-            #btn-download:hover {{
-                background-color: #14483A;
-                transform: scale(1.05);
+                top: 20px; right: 20px; z-index: 9999;
+                padding: 15px 30px; border-radius: 10px; border:none;
+                background: #1E7C5C; color: white; font-weight: bold; cursor: pointer;
             }}
         </style>
     </head>
     <body>
-    <button id="btn-download" onclick="downloadPNG()">📸 BAIXAR ARTE (NOVO MOTOR)</button>
+    <button id="btn-download" onclick="downloadPNG()">📸 BAIXAR (SISTEMA DE SEGURANÇA)</button>
     
     <script>
         async function downloadPNG() {{
@@ -532,37 +387,35 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
             btn.innerText = "⏳ Processando...";
             btn.disabled = true;
             
-            // Force layout recalc
             await document.fonts.ready;
             
-            // Fixed dimensions for consistent rendering
-            const targetWidth = 1200;
+            // Calculate height with a safety buffer
+            const bodyHeight = element.scrollHeight;
+            const targetHeight = bodyHeight + 50; 
             
             const config = {{
                 quality: 1.0,
-                width: targetWidth,
-                height: element.offsetHeight + 5, // Exact height capture
+                width: 1200,
+                height: targetHeight,
                 style: {{
                     'transform': 'none',
                     'margin': '0',
-                    'width': '1200px', // Force width in render
-                    'min-height': '1400px' // Ensure background covers
                 }},
                 cacheBust: true,
             }};
 
             try {{
-                // 1.5x scale is usually sufficient and stable
-                const dataUrl = await htmlToImage.toPng(element, {{ ...config, pixelRatio: 1.5 }});
+                // Use 2.0x for sharpness, but standard pixel ratio
+                const dataUrl = await htmlToImage.toPng(element, {{ ...config, pixelRatio: 2.0 }});
                 
                 const link = document.createElement('a');
-                link.download = `Ranking_{position}_{rodada}.png`;
+                link.download = `Ranking_{position}_{rodada}_Fixed.png`;
                 link.href = dataUrl;
                 link.click();
                 
             }} catch (err) {{
                 console.error("Erro:", err);
-                alert("Erro ao gerar imagem. Tente novamente.");
+                alert("Erro ao gerar. Tente novamente.");
             }} finally {{
                 btn.innerText = originalText;
                 btn.disabled = false;
@@ -570,6 +423,7 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
         }}
     </script>
     <div class="report-container">
+        <!-- HEADER -->
         <div class="tcc-header">
             <div class="logo-box">{logo_img_tag}</div>
             <div class="title-box">
@@ -579,18 +433,12 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
             <div class="logo-box">{logo_img_tag}</div>
         </div>
         
-        <div style="display: flex; justify-content: flex-end; gap: 20px; margin-bottom: -10px; margin-top: 50px; max-width: 1000px; margin-left: auto; margin-right: auto; padding-right: 15px; position: relative; z-index: 10;">
-            <div style="display: flex; align-items: center; gap: 6px;">
-                <div style="width: 16px; height: 16px; background-color: #ffe8cc; border-radius: 50%; border: 1px solid #ccc;"></div>
-                <span style="font-weight: bold; color: #333; font-size: 14px;">CASA</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 6px;">
-                <div style="width: 16px; height: 16px; background-color: #dbeafe; border-radius: 50%; border: 1px solid #ccc;"></div>
-                <span style="font-weight: bold; color: #333; font-size: 14px;">FORA</span>
-            </div>
+        <!-- LEGEND - Wrapper for safety -->
+        <div style="text-align: right; margin-bottom: 10px; padding-right: 10px;">
+             <span style="display:inline-block; width:12px; height:12px; background:#ffe8cc; border-radius:50%; margin-right:5px;"></span> <b style="color:#333; margin-right:15px;">CASA</b>
+             <span style="display:inline-block; width:12px; height:12px; background:#dbeafe; border-radius:50%; margin-right:5px;"></span> <b style="color:#333;">FORA</b>
         </div>
-        
-        <div class="section-title" style="margin-top: 0px;">Últimos {n_jogos} jogos por mando</div>
+
     """
     
     def render_cards(players):
