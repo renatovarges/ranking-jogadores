@@ -220,7 +220,9 @@ def render_custom_css():
         flex-direction: column; 
         align-items: flex-end;
         gap: 8px;
-        max-width: 68%;
+        max-width: 80%; /* CORREÇÃO ROBUSTA: Aumentado de 68% para 80% para evitar overflow */
+        width: 100%; /* CORREÇÃO: Garante uso total do espaço disponível */
+        box-sizing: border-box; /* CORREÇÃO: Inclui padding no cálculo */
     }}
     
     .chips-row {{
@@ -286,14 +288,16 @@ def render_custom_css():
     /* Total Scouts Bar */
     .scouts-bar {{
         background-color: #0f382e;
-        padding: 6px 15px;
+        padding: 6px 12px; /* CORREÇÃO: Reduzido padding lateral de 15px para 12px */
         border-radius: 12px;
         display: flex;
         flex-wrap: wrap; /* CORREÇÃO: Permite quebra de linha se necessário */
-        gap: 10px;
-        margin-top: 8px; /* CORREÇÃO: Aumentado de 4px para 8px */
+        gap: 8px; /* CORREÇÃO: Reduzido de 10px para 8px para melhor ajuste */
+        margin-top: 8px;
+        width: 100%; /* CORREÇÃO ROBUSTA: Força largura total do container pai */
         max-width: 100%; /* CORREÇÃO: Garante que não ultrapasse o card */
         box-sizing: border-box; /* CORREÇÃO: Inclui padding no cálculo de largura */
+        justify-content: flex-end; /* CORREÇÃO: Alinha à direita como chips */
     }}
     
     .scout-item {{
@@ -318,7 +322,7 @@ def render_custom_css():
         justify-content: center;
         align-items: center;
         padding: 15px;
-        margin-top: 160px;
+        margin-top: 40px; /* CORREÇÃO ROBUSTA: Reduzido de 160px para 40px */
         border-radius: 0 0 15px 15px;
         position: relative;
     }}
