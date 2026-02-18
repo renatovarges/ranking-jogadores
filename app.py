@@ -152,8 +152,8 @@ def render_custom_css():
         background-color: #14483A;
         border: 2px solid #1E7C5C;
         border-radius: 25px;
-        padding: 15px 25px 30px 25px; /* Aumentado padding bottom */
-        margin-bottom: 25px;
+        padding: 20px 25px 40px 25px; /* Huge bottom padding to prevent overlay */
+        margin-bottom: 40px; /* Huge margin to separate cards */
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -167,59 +167,19 @@ def render_custom_css():
         align-items: center;
         gap: 25px;
         min-width: 400px;
+        flex-shrink: 0;
     }}
     
-    .player-circle {{
-        width: 85px;
-        height: 85px;
-        background: white;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border: 4px solid white;
-        overflow: hidden;
-        box-shadow: 0 0 15px rgba(0,0,0,0.7);
-    }}
-    .player-circle img {{
-        width: 95%;
-        height: auto;
-        object-fit: contain;
-    }}
-    
-    .info-block h3 {{
-        margin: 0;
-        font-size: 28px;
-        font-weight: 800;
-        text-transform: uppercase;
-        line-height: 1;
-        color: white;
-        font-family: 'Decalotype', sans-serif;
-    }}
-    
-    .total-score {{
-        font-size: 46px; 
-        font-weight: 800;
-        color: #2ecc71;
-        line-height: 1;
-        margin-top: 2px;
-    }}
-    
-    .media-score {{
-        font-size: 18px;
-        color: #e5e7eb;
-        font-weight: 500;
-        margin-top: 5px;
-        opacity: 0.9;
-    }}
+    /* ... */
     
     .card-right {{
         display: flex;
         flex-direction: column; 
         align-items: flex-end;
         gap: 8px;
-        width: 65%; /* Largura fixa para evitar compressão */
-        max-width: 800px;
+        flex: 1; /* Allow to grow */
+        min-width: 0; /* Prevent flex blowout */
+        margin-left: 20px;
     }}
     
     .chips-row {{
@@ -243,73 +203,22 @@ def render_custom_css():
     .bg-casa {{ background-color: #ffe8cc; color: #333; }}
     .bg-fora {{ background-color: #dbeafe; color: #333; }}
     
-    .chip-logo-circle {{
-        width: 38px; 
-        height: 38px;
-        background-color: white;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        flex-shrink: 0;
-    }}
-    
-    .chip-adversario {{
-        width: 95%;
-        height: 95%;
-        object-fit: contain;
-    }}
-    
-    .chip-content {{
-        display: flex;
-        flex-direction: column; 
-        justify-content: center;
-        line-height: 1;
-    }}
-
-    .chip-score {{
-        font-size: 19px;
-        font-weight: 800;
-        color: #111;
-        white-space: nowrap; 
-    }}
-    
-    .chip-scouts {{
-        font-size: 14px;
-        font-weight: 800;
-        color: #333;
-        white-space: nowrap;
-    }}
+    /* ... */
     
     /* Total Scouts Bar */
     .scouts-bar {{
         background-color: #0f382e;
-        padding: 6px 15px;
+        padding: 8px 15px;
         border-radius: 12px;
         display: flex;
         gap: 10px;
         margin-top: 5px;
         flex-wrap: wrap;
         justify-content: flex-end;
-        width: 100%; /* Full width of parent */
-        margin-top: auto; /* Push to bottom if flex container grows */
-        box-sizing: border-box;
+        max-width: 100%;
     }}
     
-    .scout-item, .scout-neg {{
-        margin-left: 12px;
-        font-weight: 700;
-        font-size: 16px;
-    }}
-    
-    .scout-item {{ color: #00e676; }}
-    .scout-neg {{ color: #ff5252; }} 
-    
-    /* Scoped colors for inside chips too */
-    .chip-scout-pos {{ color: #008f4c; }} 
-    
-    /* Footer - Natural Flow */
+    /* Footer - Natural Flow with Margin */
     .tcc-footer {{
         background-color: #0f382e;
         color: white;
@@ -317,10 +226,8 @@ def render_custom_css():
         justify-content: center;
         align-items: center;
         padding: 20px;
-        margin-top: 80px; /* Huge margin to separate */
-        width: 100%;
-        border-radius: 15px;
-        box-sizing: border-box;
+        margin-top: 150px; /* Massive margin to ensure it stays at bottom */
+        border-radius: 0 0 15px 15px;
         clear: both;
     }}
     .footer-content {{
@@ -563,6 +470,8 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
                     <div class="scouts-bar">
                         {total_scouts_html}
                     </div>
+                    <!-- Spacer to force height in html-to-image -->
+                    <div style="height: 10px; width: 100%; clear: both;"></div>
                 </div>
             </div>
             """
