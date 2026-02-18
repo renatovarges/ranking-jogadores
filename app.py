@@ -84,8 +84,8 @@ def render_custom_css():
         background-position: center;
         background-repeat: no-repeat;
         background-repeat: no-repeat;
-        padding: 120px 40px 60px 40px; /* Top: 120px (Lower Header), Bottom: 60px (Extra Space for Footer) */
-        min-height: auto; /* Fix "Stretching" - wrap content only */
+        padding: 120px 40px 40px 40px; /* Top: 120px (Lower Header), Bottom: 40px */
+        min-height: 100vh; /* Force minimum viewport height */
         display: flex;
         flex-direction: column;
         color: white;
@@ -219,17 +219,18 @@ def render_custom_css():
         display: flex;
         flex-direction: column; 
         align-items: flex-end;
-        gap: 8px;
-        max-width: 68%; /* Increased from 60% to help chips fit in one line */
-        min-height: 80px; /* Force minimum height to prevent overlap */
+        gap: 10px;
+        max-width: 75%; /* Increased from 68% to 75% to accommodate more chips */
+        min-height: 100px; /* Increased from 80px to 100px for better spacing */
+        flex-shrink: 0; /* Prevent shrinking */
     }}
     
     .chips-row {{
         display: flex;
-        gap: 6px; /* Compact gap from 8px */
+        gap: 8px; /* Increased from 6px for better spacing */
         flex-wrap: wrap; 
         justify-content: flex-end; 
-        max-width: 1000px; 
+        width: 100%; /* Use full width available */
     }}
     
     /* Chips */
@@ -287,11 +288,13 @@ def render_custom_css():
     /* Total Scouts Bar */
     .scouts-bar {{
         background-color: #0f382e;
-        padding: 6px 15px;
+        padding: 8px 15px; /* Increased from 6px to 8px */
         border-radius: 12px;
         display: flex;
         gap: 10px;
-        margin-top: 4px;
+        margin-top: 6px; /* Increased from 4px to 6px */
+        flex-wrap: wrap; /* Allow wrapping if needed */
+        max-width: 100%; /* Ensure it doesn't overflow */
     }}
     
     .scout-item {{
@@ -315,11 +318,12 @@ def render_custom_css():
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 20px 15px; /* Increased vertical padding */
-        margin-top: 180px; /* Increased to 180px to push footer significantly down */
+        padding: 25px 15px; /* Increased vertical padding */
+        margin-top: auto; /* Push footer to bottom using flexbox */
         border-radius: 0 0 15px 15px; /* Rounded bottom if container is rounded */
         position: relative;
         flex-shrink: 0; /* Prevent footer from shrinking */
+        width: 100%;
     }}
     .footer-content {{
          display: flex;
@@ -459,9 +463,9 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
                 return (node.id !== 'btn-download');
             }};
 
-            // Calculate precise dimensions with generous buffer
-            const width = element.scrollWidth;
-            const height = element.scrollHeight + 200; // Increased buffer from 50 to 200 for footer and last card
+            // Calculate precise dimensions - force full capture
+            const width = Math.max(element.scrollWidth, element.offsetWidth);
+            const height = Math.max(element.scrollHeight, element.offsetHeight) + 100; // Generous buffer
 
             const config = {{
                 quality: 0.95,
@@ -523,7 +527,7 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
         </div>
         
         <!-- LEGEND - Aligned Right & Pushed Down -->
-        <div style="display: flex; justify-content: flex-end; gap: 20px; margin-bottom: -10px; margin-top: 50px; max-width: 1000px; margin-left: auto; margin-right: auto; padding-right: 15px; position: relative; z-index: 10;">
+        <div style="display: flex; justify-content: flex-end; gap: 20px; margin-bottom: 15px; margin-top: 30px; padding-right: 0px; position: relative;">
             <div style="display: flex; align-items: center; gap: 6px;">
                 <div style="width: 16px; height: 16px; background-color: #ffe8cc; border-radius: 50%; border: 1px solid #ccc;"></div>
                 <span style="font-weight: bold; color: #333; font-size: 14px;">CASA</span>
