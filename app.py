@@ -155,13 +155,14 @@ def render_custom_css():
         background-color: #14483A;
         border: 2px solid #1E7C5C;
         border-radius: 25px;
-        padding: 15px 25px;
-        margin-bottom: 20px; /* Increased from 15px to 20px for better spacing */
+        padding: 20px 25px; /* Increased from 15px to 20px */
+        margin-bottom: 25px; /* Increased from 20px to 25px for better spacing */
         display: flex;
-        align-items: center;
+        align-items: flex-start; /* Changed from center to flex-start */
         justify-content: space-between;
         box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; /* Clean font for data */
+        min-height: 180px; /* Added minimum height to prevent compression */
     }}
     
     .card-left {{
@@ -219,18 +220,19 @@ def render_custom_css():
         display: flex;
         flex-direction: column; 
         align-items: flex-end;
-        gap: 10px;
-        max-width: 75%; /* Increased from 68% to 75% to accommodate more chips */
-        min-height: 100px; /* Increased from 80px to 100px for better spacing */
+        gap: 12px;
+        width: 75%; /* Fixed width instead of max-width */
+        min-height: 150px; /* DRASTICALLY increased from 100px to 150px */
         flex-shrink: 0; /* Prevent shrinking */
     }}
     
     .chips-row {{
         display: flex;
-        gap: 8px; /* Increased from 6px for better spacing */
+        gap: 10px; /* Increased from 8px for better spacing */
         flex-wrap: wrap; 
         justify-content: flex-end; 
         width: 100%; /* Use full width available */
+        align-items: flex-start; /* Align items to start */
     }}
     
     /* Chips */
@@ -463,9 +465,9 @@ def render_full_report_dual(position, rodada, players_mando, players_geral, n_jo
                 return (node.id !== 'btn-download');
             }};
 
-            // Calculate precise dimensions - force full capture
+            // Calculate precise dimensions - force full capture with LARGE buffer
             const width = Math.max(element.scrollWidth, element.offsetWidth);
-            const height = Math.max(element.scrollHeight, element.offsetHeight) + 100; // Generous buffer
+            const height = Math.max(element.scrollHeight, element.offsetHeight) + 300; // DRASTICALLY increased buffer from 100 to 300
 
             const config = {{
                 quality: 0.95,
