@@ -292,8 +292,9 @@ def process_ranking(df, n_jogos, filter_type, target_round, rodadas_data, top_n_
                 if normalize_name(pos_real) not in target_positions:
                     continue
 
-            if nome_norm not in player_data:
-                player_data[nome_norm] = {
+            player_key = (nome_norm, time)
+            if player_key not in player_data:
+                player_data[player_key] = {
                     'Nome': row.get('Jogador_Original', row.get('Nome2', 'Unknown')),
                     'Time': row['Time'],
                     'Posicao': pos_real,
@@ -303,7 +304,7 @@ def process_ranking(df, n_jogos, filter_type, target_round, rodadas_data, top_n_
                     'Scouts': {}
                 }
 
-            p = player_data[nome_norm]
+            p = player_data[player_key]
 
             # Info do Jogo
             mando_str = str(row['Mand']).upper()
