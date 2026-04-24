@@ -24,6 +24,28 @@ def normalize_name(name):
     nfkd_form = unicodedata.normalize('NFKD', str(name))
     return u"".join([c for c in nfkd_form if not unicodedata.combining(c)]).upper().strip()
 
+
+# Apelidos de times: mapeia variantes para uma forma canônica
+# Evita mismatch entre fontes de dados (API vs CSV de classificação)
+TEAM_ALIASES = {
+    'INTER': 'INTERNACIONAL',
+    'RB BRAGANTINO': 'RED BULL BRAGANTINO',
+    'BRAGANTINO': 'RED BULL BRAGANTINO',
+    'ATLETICO MG': 'ATLETICO-MG',
+    'ATLETICOMG': 'ATLETICO-MG',
+    'ATHLETICO PR': 'ATHLETICO-PR',
+    'ATHLETICOPR': 'ATHLETICO-PR',
+}
+
+
+def normalize_team(name):
+    """
+    Normaliza nomes de times aplicando normalize_name + aliases conhecidos.
+    Garante que variantes como 'Inter' e 'Internacional' sejam tratadas como o mesmo time.
+    """
+    base = normalize_name(name)
+    return TEAM_ALIASES.get(base, base)
+
 # OTIMIZAÇÃO 1: Cache de dados
 @st.cache_data(show_spinner=False)
 def load_data(file_path):
@@ -53,7 +75,8 @@ def load_data(file_path):
 
         if 'Time' in df.columns:
             # As vezes o time vem como ID ou Nome. Inspect mostrou 'Time'.
-            df['Time_Norm'] = df['Time'].apply(normalize_name)
+            # Usa normalize_team para aplicar aliases e casar com o CSV de classificação.
+            df['Time_Norm'] = df['Time'].apply(normalize_team)
 
         if 'PosReal' in df.columns:
              df['Posicao_Norm'] = df['PosReal'].apply(normalize_name)
@@ -104,15 +127,16 @@ def load_classificacao(file_path):
                      df = pd.read_excel(file_path)
 
         else:
-            df = pd.read_csv(file_path, sep=None, engine='python')
+            # utf-8-sig remove BOM (\ufeff) que aparece em CSVs salvos pelo Excel
+            df = pd.read_csv(file_path, sep=None, engine='python', encoding='utf-8-sig')
 
-        # Normalizar Colunas
-        df.columns = [str(c).strip().upper() for c in df.columns]
+        # Normalizar Colunas (strip + upper + remove BOM residual)
+        df.columns = [str(c).strip().upper().replace('\ufeff', '') for c in df.columns]
 
-        # LOGICA 1: Coluna 'CLASSIFICACAO' explícita
+        # LOGICA 1: Coluna 'CLASSIFICACAO' explícita (substring match para robustez)
         col_jogador = next((c for c in df.columns if 'JOGADOR' in c), None)
         col_class = next((c for c in df.columns if 'CLASSIFICA' in c), None)
-        col_time = next((c for c in df.columns if c in ('TIME', 'CLUB', 'CLUBE', 'TEAM', 'TIMES')), None)
+        col_time = next((c for c in df.columns if ('TIME' in c) or ('CLUB' in c) or ('TEAM' in c)), None)
 
         mapping = {}
 
@@ -123,8 +147,9 @@ def load_classificacao(file_path):
                 if not nome: continue
 
                 # Chave composta (time_norm, nome) quando time disponível; fallback só nome
+                # Usa normalize_team para casar aliases (Inter↔Internacional, RB Bragantino↔Red Bull Bragantino, etc.)
                 if col_time and pd.notna(row[col_time]) and str(row[col_time]).strip():
-                    key = (normalize_name(str(row[col_time])), nome)
+                    key = (normalize_team(str(row[col_time])), nome)
                 else:
                     key = nome
 
