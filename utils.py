@@ -112,6 +112,7 @@ def load_classificacao(file_path):
         # LOGICA 1: Coluna 'CLASSIFICACAO' explícita
         col_jogador = next((c for c in df.columns if 'JOGADOR' in c), None)
         col_class = next((c for c in df.columns if 'CLASSIFICA' in c), None)
+        col_time = next((c for c in df.columns if c in ('TIME', 'CLUB', 'CLUBE', 'TEAM', 'TIMES')), None)
 
         mapping = {}
 
@@ -121,9 +122,15 @@ def load_classificacao(file_path):
                 nome = normalize_name(str(row[col_jogador]))
                 if not nome: continue
 
+                # Chave composta (time_norm, nome) quando time disponível; fallback só nome
+                if col_time and pd.notna(row[col_time]) and str(row[col_time]).strip():
+                    key = (normalize_name(str(row[col_time])), nome)
+                else:
+                    key = nome
+
                 # Check 1: Coluna Classificacao
                 if col_class and pd.notna(row[col_class]):
-                    mapping[nome] = normalize_name(str(row[col_class]))
+                    mapping[key] = normalize_name(str(row[col_class]))
                     continue
 
                 # Check 2: Formato Wide (1º VOLANTE, 2º VOLANTE, MEIA)
@@ -133,11 +140,11 @@ def load_classificacao(file_path):
                 if '2º VOLANTE' in df.columns and pd.notna(row['2º VOLANTE']): is_volante = True
 
                 if is_volante:
-                    mapping[nome] = 'VOLANTE'
+                    mapping[key] = 'VOLANTE'
                     continue
 
                 if 'MEIA' in df.columns and pd.notna(row['MEIA']):
-                    mapping[nome] = 'MEIA'
+                    mapping[key] = 'MEIA'
                     continue
 
         return mapping
@@ -276,9 +283,14 @@ def process_ranking(df, n_jogos, filter_type, target_round, rodadas_data, top_n_
 
             # Detecção de Posição
             # 1. Tenta pegar do mapa externo (Meia/Volante)
+            # Prioriza chave composta (time, nome) para evitar colisão entre homônimos de times diferentes
             pos_real = None
-            if pos_map and nome_norm in pos_map:
-                pos_real = pos_map[nome_norm]
+            if pos_map:
+                composite_key = (time, nome_norm)
+                if composite_key in pos_map:
+                    pos_real = pos_map[composite_key]
+                elif nome_norm in pos_map:
+                    pos_real = pos_map[nome_norm]
 
             # 2. Se não achou ou não é Meia/Volante, usa o ID da planilha convertido
             if not pos_real:
